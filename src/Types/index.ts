@@ -10,3 +10,9 @@ export interface TaskObj{
     text: string,
     concluded: boolean
 }
+
+export interface InputTextProps {
+    inputText: string,
+    setText: (string) => void,
+    handleAddTask: () => void,
+}

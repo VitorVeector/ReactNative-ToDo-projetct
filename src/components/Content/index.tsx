@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Alert, FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { styles } from './styles'
 import { Clipboard } from "../../Icons/Clipboard"
 import { Task } from '../../components/Task'
 import { TaskObj } from '../../Types'
+import { InputText } from '../../components/InputText'
 
 export const Content = () => {
     const [inputText, setInputText] = useState<string>('')
@@ -57,20 +58,7 @@ export const Content = () => {
         <>
             <View
                 style={styles.container}>
-                <View
-                    style={styles.input}>
-                    <TextInput
-                        value={inputText}
-                        onChangeText={text => setInputText(text)}
-                        style={styles.textInput}
-                        placeholder='Adicione uma nova tarefa'
-                        placeholderTextColor={'#808080'} />
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={handleAddTask}>
-                        <Text style={styles.textButton}>+</Text>
-                    </TouchableOpacity>
-                </View>
+                <InputText setText={setInputText} inputText={inputText} handleAddTask={handleAddTask}/>
                 <View style={styles.content}>
                     <View style={styles.infoTask}>
                         <View style={styles.createdTask}>
