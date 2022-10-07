@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Alert, FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { styles } from './styles'
 import { Clipboard } from "../../Icons/Clipboard"
@@ -8,16 +8,16 @@ import { TaskObj } from '../../Types'
 export const Content = () => {
     const [inputText, setInputText] = useState<string>('')
     const [tasks, setTasks] = useState<TaskObj[]>([])
-    const [concludedTesk, setConcludedTask] = useState<string[]>([])
+    const [concludedTesk, setConcludedTask] = useState(0)
 
-    function handleAddTask(){
+    function handleAddTask() {
         const task = {
             id: Math.random(),
             text: inputText,
             concluded: false,
         }
 
-        if(inputText === ''){
+        if (inputText === '') {
             Alert.alert('Campo vazio')
         } else {
             setTasks([...tasks, task])
@@ -25,7 +25,7 @@ export const Content = () => {
         }
     }
 
-    function handleRemoveTask(id){
+    function handleRemoveTask(id) {
         Alert.alert('Remover task', 'Você realmente deseja remover essa Task?', [
             {
                 text: 'Cancelar',
@@ -38,9 +38,20 @@ export const Content = () => {
                     setTasks(newTaks)
                 }
             }
-            
+
         ])
     }
+
+    function updateTask(id, concluded) {
+        const index = tasks.findIndex(task => task.id === id)
+        const newList = tasks
+        newList[index].concluded = !concluded
+        setTasks([...newList])
+
+        const filteredTask = newList.filter(task => task.concluded === true)
+        setConcludedTask(filteredTask.length)
+    }
+
 
     return (
         <>
@@ -53,7 +64,7 @@ export const Content = () => {
                         onChangeText={text => setInputText(text)}
                         style={styles.textInput}
                         placeholder='Adicione uma nova tarefa'
-                        placeholderTextColor={'#808080'}/>
+                        placeholderTextColor={'#808080'} />
                     <TouchableOpacity
                         style={styles.button}
                         onPress={handleAddTask}>
@@ -100,23 +111,23 @@ export const Content = () => {
                                     paddingVertical: 2,
                                     borderRadius: 999
                                 }
-                            }>3</Text>
+                            }>{concludedTesk}</Text>
                         </View>
                     </View>
                     <View style={styles.tasks}>
                         <FlatList
                             data={tasks}
-                            renderItem={({item}) => {
-                                return(
-                                    <Task text={item.text} concluded={item.concluded} onRemove={() => handleRemoveTask(item.id)}/>
+                            renderItem={({ item }) => {
+                                return (
+                                    <Task text={item.text} onRemove={() => handleRemoveTask(item.id)} concluded={item.concluded} toggleConcluded={() => updateTask(item.id, item.concluded)} />
                                 )
-                            }} 
+                            }}
                             ListEmptyComponent={() => (
                                 <View
                                     style={styles.listTask}>
-                                    <Clipboard/>
-                                    <Text style={{fontWeight: '700', color: '#808080', marginTop: 16}}>Você ainda não tem tarefas cadastradas</Text>
-                                    <Text style={{color: '#808080'}}>Crie tarefas e organize seus itens a fazer</Text>
+                                    <Clipboard />
+                                    <Text style={{ fontWeight: '700', color: '#808080', marginTop: 16 }}>Você ainda não tem tarefas cadastradas</Text>
+                                    <Text style={{ color: '#808080' }}>Crie tarefas e organize seus itens a fazer</Text>
                                 </View>
                             )}
                         />

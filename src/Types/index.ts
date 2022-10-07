@@ -1,11 +1,12 @@
 export interface TaskProps{
     text: string,
-    concluded: boolean,
     onRemove: () => void;
+    concluded: boolean,
+    toggleConcluded: () => void
 }
 
 export interface TaskObj{
     id: number,
     text: string,
-    concluded: boolean,
+    concluded: boolean
 }

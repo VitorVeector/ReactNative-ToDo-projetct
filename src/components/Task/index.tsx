@@ -6,13 +6,22 @@ import { Trash } from '../../Icons/Trash'
 import { styles } from './styles'
 import { CheckedCircle } from '../../Icons/CheckedCircle'
 
-export function Task({text, concluded, onRemove}: TaskProps){
+export function Task({text, onRemove, concluded, toggleConcluded}: TaskProps){
+
+    const concludedTask = concluded ? <CheckedCircle/> : <Circle/> 
     return (
         <View style={styles.component}>
-            {
-                concluded ? <CheckedCircle/> : <Circle/> 
-            }
-            <Text style={styles.text}>{text}</Text>
+            <TouchableOpacity
+                onPress={toggleConcluded}>
+                {concludedTask}
+            </TouchableOpacity>
+            <Text style={{
+                color: concluded ? '#808080' : '#F2F2F2',
+                maxWidth: 235,
+                paddingVertical: 12,
+                textDecorationLine: concluded ? 'line-through' : 'none'
+
+            }}>{text}</Text>
             <TouchableOpacity
                 onPress={onRemove}>
                 <Trash/>
